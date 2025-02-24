@@ -2,7 +2,7 @@
 
 ![ClickDrink Cover](assets/cover.png)
 
-A Telegram Mini App that lets users earn rewards through social engagement and interactive clicking. Built with modern web technologies and seamlessly integrated with Telegram's WebApp platform.
+A Telegram Mini App that lets users earn rewards through social engagement and interactive clicking. Built with HTML, CSS, JavaScript, Express.js, MongoDB, Mongoose, Node.js, body-parser, session management, HTTPS, dotenv, and more with seamless integration with Telegram's WebApp platform.
 
 ## 🚀 Features
 
@@ -62,7 +62,7 @@ function triggerHapticFeedback() {
         window.Android.vibrate(50);
     }
 }
-
+```
 
 ## 📱 Usage
 
@@ -91,4 +91,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * Website: [shivsingh.com](https://shivsingh.com)
 * Email: hi@shivsingh.com
-* LinkedIn: [QuansysAI](https://linkedin.com/in/shivsinghin)
+* LinkedIn: [Shiv Singh](https://linkedin.com/in/shivsinghin)
