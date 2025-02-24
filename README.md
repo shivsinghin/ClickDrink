@@ -30,7 +30,7 @@ A Telegram Mini App that lets users earn rewards through social engagement and i
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/clickdrink.git
+   git clone https://github.com/shivsinghin/ClickDrink.git
    ```
 2. Install dependencies
    ```bash
