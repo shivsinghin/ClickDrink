@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ClickDrink: One Tap, Endless Cheers.</title>
+
+  <link rel="stylesheet" href="home.css">
+  <link rel="icon" href="assets/icon.png" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.ready();
+        Telegram.WebApp.setHeaderColor('#000000');
+        }
+    });
+  </script>
+
+  <style>
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #040404;
+        padding: 6px 15px;
+        text-align: left;
+        border-bottom: 1px solid #141414;
+    }
+
+    .password-submit-new {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 50px;
+        border: none;
+        background-color: #ffffffe3;
+        color: #000000;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .blue-check{
+        margin-top: 0px;
+        margin-left: 3px;
+        fill: rgb(0, 72, 255);
+    }
+
+    .header-logo {
+        width: 100px;
+        height: auto;
+    }
+
+    .content-section {
+        display: none;
+        padding: 0px;
+        flex-grow: 1;
+        overflow-y: auto;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    .content-section h2 {
+        margin-top: 0;
+        font-size: 28px;
+    }
+
+    .header-logos{
+        width: 36%;
+        padding-left: 6px;
+    }
+
+    .content-section p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+ 
+    .app-container {
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        overflow: hidden;
+        position: relative;
+    }
+    .background-image {
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.8) 10%,
+                rgba(0, 0, 0, 0.5) 20%,
+                rgba(0, 0, 0, 0) 80%
+            ),
+            url('assets/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.5);
+        position: absolute;
+    }
+    .gradient-overlay-home {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 75%;
+        background: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.856) 50%, rgba(0,0,0,0) 100%);
+    }
+    .content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        padding-bottom: 40px;
+    }
+    .heart-logo {
+        font-size: 48px;
+        margin-bottom: 20px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .app-info {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 30px;
+    }
+    .app-info h2 {
+        margin: 0 0 10px;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .app-info p {
+        margin: 0;
+        font-size: 16px;
+        opacity: 0.8;
+        padding-left: 35px;
+        padding-right: 35px;
+        line-height: 1.3;
+    }
+    .next-button {
+        background-color: #d56400;
+        color: #fefefe;
+        border: none;
+        padding: 16px;
+        width: 85%;
+        max-width: 320px;
+        border-radius: 30px;
+        font-size: 18px;
+        font-weight: normal;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        margin-bottom: 35px;
+    }
+    
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        max-width: 600px;
+        padding: 15px;
+    }
+
+    .card {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3/4;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .card-info {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        color: white;
+    }
+
+    .gradient-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 23%;
+        background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 100%);
+    }
+
+    .name-age {
+        display: flex;
+        align-items: center;
+    }
+
+    .name {
+        font-size: 15px;
+        margin-right: 5px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        margin-left: 5px;
+        margin-bottom: -2px;
+    }
+
+    .age {
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        margin-left: 5px;
+    }
+
+    .blue-check {
+        width: 14px;
+        height: 14px;
+    }
+
+    .mobile-device {
+        width: 20%;
+        max-width: 19%;
+        position: fixed;
+        top: 48%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        padding: 15px;
+        border: 1px solid;
+        border-radius: 12px;
+        border-color: #434343;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.015);
+        background-color: rgb(29, 29, 29);
+        margin-left: 0px;
+    }
+
+    .mobile-device-img {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        body,
+        html {
+        width: 100%;
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+        font-size: 17px;
+        background-color: #ffffff;
+        overflow: hidden;
+        }
+
+        #wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        }
+
+        .chat-container-2 {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+        overflow: hidden;
+        }
+        .chat-container-1 {
+        height: 0%;
+        }
+        .chat-container-3 {
+        height: 0%;
+        }   
+
+        .header-logos{
+        width: 36%;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        }
+        
+        .password-submit-new {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 50px;
+        margin-bottom: 20px;
+        border: none;
+        background-color: #ffffffe3;
+        color: #000000;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        }
+
+        .password-submit-new:hover {
+        background-color: #000000;
+        }
+
+        .mobile-device {
+        width: 100%;
+        max-width: 80%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        padding: 15px;
+        border: 1px solid;
+        border-radius: 12px;
+        border-color: #434343;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.015);
+        background-color: rgb(29, 29, 29);
+        margin-left: 0px;
+        }
+
+        .mobile-device-img {
+        width: 80%;
+        margin-bottom: 10px;
+        }
+    }
+    @keyframes floatAnimation {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-50px) scale(1.5);
+            opacity: 0;
+        }
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #floatingNumber {
+        position: absolute;
+        color: #b8b8b8;
+        font-weight: 700;
+        font-size: 1rem;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+
+    .float-animation {
+        animation: floatAnimation 1s ease-in-out forwards;
+    }
+
+    .info-icon {
+        position: relative;
+        color: rgb(28, 28, 28);
+        vertical-align: middle; 
+        margin-bottom: 0;
+    }
+
+    .tooltip {
+        display: none;
+        position: absolute;
+        background-color: #131313;
+        color: #5f5f5f;
+        text-align: center;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+        z-index: 1;
+        top: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 200px;
+        width: max-content;
+        word-wrap: break-word;
+        font-family: 'Arial', sans-serif;
+        white-space: normal;
+        letter-spacing: normal;
+        word-spacing: normal;
+        line-height: 1.0;
+    }
+
+    .info-icon:hover .tooltip {
+        display: block;
+    }
+
+    @keyframes buttonPress {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(0.95); }
+    }
+    .button-shadow {
+        box-shadow: 0 0 30px 5px rgba(59, 130, 246, 0.5);
+    }
+    @keyframes floatUp {
+        0% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-20px); }
+    }
+    .float-animation {
+        animation: floatUp 0.5s ease-out;
+    }
+    .card {
+        transition: all 0.5s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .body-new {
+        margin-top: 50px;
+        margin-left: 5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #000000;
+    }
+
+    .container-x {
+        max-width: 375px;
+        margin: 0 auto;
+    }
+    
+    .item-x {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid #151515;
+        transition: all 0.3s ease;
+    }
+    .item-x:last-child {
+        border-bottom: none;
+    }
+
+    .icon-text {
+        display: flex;
+        align-items: center;
+    }
+    .icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+    }
+
+    .text-x {
+        flex-grow: 1;
+        margin-left: 5px;
+    }
+
+    .title-x {
+        font-size: 17px;
+        font-weight: 500;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .bp {
+        font-size: 15px;
+        color: #858585;
+        margin: 4px 0 0 0;
+    }
+
+    .button-x {
+        background-color: #1b1b1b;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        width: 70px; 
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-x:hover {
+        background-color: #1b1b1b;
+    }
+
+    .button-x:active {
+        background-color: #1b1b1b;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .item-x {
+        animation: fadeIn 0.5s ease forwards;
+        opacity: 0;
+    }
+
+    .item-x:nth-child(1) { animation-delay: 0.1s; }
+    .item-x:nth-child(2) { animation-delay: 0.2s; }
+    .item-x:nth-child(3) { animation-delay: 0.3s; }
+    .item-x:nth-child(4) { animation-delay: 0.4s; }
+
+    /* <unused-button> */
+    .sticky-button {
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+    }
+    .share-button {
+        width: 100%;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        margin-top: 20px;
+    }
+    /* </unused-button> */
+
+    .card-x {
+        background-image: url('assets/earn-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        border-radius: 15px;
+        width: 100%;
+        height: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 35px;
+    }
+
+    .card-x::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.34);
+        z-index: 1;
+    }
+
+    .card-content {
+        display: flex;
+        flex-direction: column;
+        z-index: 2;
+    }
+
+    .card-x h2 {
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+        margin-bottom: 4px;
+    }
+
+    .ticket-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .ticket-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 4px;
+    }
+
+    .ticket-count {
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .play-button {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 18px;
+        font-size: 15.5px;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .button-x .preloader {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #ffffff;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .button-x.loading .button-text {
+        visibility: hidden;
+    }
+
+    .button-x.loading .preloader {
+        display: block;
+    }
+
+    .button-x:disabled {
+        background-color: #1b1b1b;
+        cursor: not-allowed;
+    }
+    .button-x .disabled-icon {
+        display: none;
+    }
+
+    .button-x:disabled .disabled-icon {
+        display: inline-block;
+    }
+
+    .button-x:disabled .button-text {
+        display: none;
+    }
+
+    .button-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .button-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .body-x {
+        font-family: 'Inter', sans-serif;
+        background-color: #000;
+        color: #fff;
+        margin: 0;
+        padding: 16px;
+        font-size: 16px;
+    }
+
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #000000;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+
+    .character-card {
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="preloader">
+    <div class="loader"></div>
+  </div>
+
+  <div id="wrapper">
+    <div class="chat-container-1">
+    </div>
+    
+    <div class="chat-container-2">      
+
+        <!-- HOME ---------------------------------------------------------------------->
+        <div id="home-content" class="content-section active" style="background-color: #f5f3ea;">
+            <div class="app-container">
+                <div class="background-image"></div>
+                <div class="gradient-overlay-home"></div>
+                <div class="content">
+                    <div class="heart-logo"><img src="assets/logo.png" width="60%"></div>
+                    <div class="app-info">
+                        <p style="font-size: 20px; line-height: 1.4rem;">Click Drink: One Tap, Endless Cheers.</p>
+                    </div>
+                    <button class="next-button">Get a Free Drink</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WALLET ---------------------------------------------------------------------->
+        <div id="settings-content" class="content-section body-x" >
+            <div class="card-x">
+                <div class="card-content">
+                    <h2 style="font-size: 30px;"><span id="username">Loading...</span></h2>
+                    <div class="ticket-container" style="margin-top: 2px;">
+                        <img src="assets/icon.png" alt="Ticket" class="ticket-icon">
+                        <span class="ticket-count" id="dollarValue">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="tap-earn-section" style="display: flex; justify-content: center; align-items: center; margin-top: -80px; min-height: 60vh; width: 100%; color: rgba(255, 255, 255, 0.793); flex-direction: column;">
+                <div style="display: flex; align-items: center; margin-bottom: 0.5rem; position: relative;">
+                    <span id="counter" style="font-size: 1.3rem; font-weight: 500; margin-left: 6px; font-family: 'Inter', sans-serif;">
+                        Loading...
+                    </span>
+                    <span id="infoIcon" style="cursor: pointer; margin-left: 6px; font-size: 1rem; color: rgb(38, 38, 38); display: inline-flex; align-items: center;">
+                        <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgb(90, 90, 90)" width="16px" height="16px">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v2h2V7zm0 4h-2v6h2v-6z"/>
+                        </svg>    
+                    </span>
+                    <span class="tooltip" id="tooltip">NOTE: CLD is the ClickDrink Ecosystem utility token and it's vlaue depends on number of users.</span>
+                    <span id="floatingNumber" class="hidden">+1</span>
+                </div>
+                <button id="mainButton" style="margin-top: 10px; background-color: white; border-radius: 9999px; padding: 0.25rem; width: 12rem; height: 12rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px 20px rgb(63, 63, 63); outline: none;">
+                    <img src="assets/button-icon.png" alt="Triangle logo" style="width: 70%; height: 70%">
+                </button>
+            </div>
+            <div class="container-x" style="margin-top: -40px; padding-left: 10px; padding-right: 10px;">
+                <div class="item-x">
+                    <div class="icon-text">
+                        <svg style="margin-right: 10px;" fill="#fff" width="25px" height="25px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.313 26.102l-6.296-3.488c2.34-1.841 2.976-5.459 2.976-7.488v-4.223c0-2.796-3.715-5.91-7.447-5.91-3.73 0-7.544 3.114-7.544 5.91v4.223c0 1.845 0.78 5.576 3.144 7.472l-6.458 3.503s-1.688 0.752-1.688 1.689v2.534c0 0.933 0.757 1.689 1.688 1.689h21.625c0.931 0 1.688-0.757 1.688-1.689v-2.534c0-0.994-1.689-1.689-1.689-1.689zM23.001 30.015h-21.001v-1.788c0.143-0.105 0.344-0.226 0.502-0.298 0.047-0.021 0.094-0.044 0.139-0.070l6.459-3.503c0.589-0.32 0.979-0.912 1.039-1.579s-0.219-1.32-0.741-1.739c-1.677-1.345-2.396-4.322-2.396-5.911v-4.223c0-1.437 2.708-3.91 5.544-3.91 2.889 0 5.447 2.44 5.447 3.91v4.223c0 1.566-0.486 4.557-2.212 5.915-0.528 0.416-0.813 1.070-0.757 1.739s0.446 1.267 1.035 1.589l6.296 3.488c0.055 0.030 0.126 0.063 0.184 0.089 0.148 0.063 0.329 0.167 0.462 0.259v1.809zM30.312 21.123l-6.39-3.488c2.34-1.841 3.070-5.459 3.070-7.488v-4.223c0-2.796-3.808-5.941-7.54-5.941-2.425 0-4.904 1.319-6.347 3.007 0.823 0.051 1.73 0.052 2.514 0.302 1.054-0.821 2.386-1.308 3.833-1.308 2.889 0 5.54 2.47 5.54 3.941v4.223c0 1.566-0.58 4.557-2.305 5.915-0.529 0.416-0.813 1.070-0.757 1.739 0.056 0.67 0.445 1.267 1.035 1.589l6.39 3.488c0.055 0.030 0.126 0.063 0.184 0.089 0.148 0.063 0.329 0.167 0.462 0.259v1.779h-4.037c0.61 0.46 0.794 1.118 1.031 2h3.319c0.931 0 1.688-0.757 1.688-1.689v-2.503c-0.001-0.995-1.689-1.691-1.689-1.691z"></path>
+                        </svg>
+                        <div class="text-x">
+                            <h2 style="font-size: 17px; font-weight: 500; margin: 0; line-height: 1.2;">Share with friends</h2>
+                            <p class="bp">+8000 CLD</p>
+                        </div>
+                    </div>
+                    <button class="button-x" onclick="shareLink()">
+                        <span class="button-text">Start</span>
+                        <span class="preloader"></span>
+                        <svg class="disabled-icon" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44771 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8Z" fill="#a8a8a8"/><path fill-rule="evenodd" clip-rule="evenodd" d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="#a8a8a8"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="item-x">
+                    <div class="icon-text">
+                        <svg style="margin-right: 10px;" width="26px" height="26px" viewBox="0 0 15 15" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd"clip-rule="evenodd"d="M7.23336 4.69629C7.23336 2.96884 8.63335 1.56857 10.36 1.56857C11.3736 1.56857 12.183 2.04804 12.7254 2.74385C13.3079 2.62467 13.8557 2.40913 14.3513 2.11508C14.1559 2.72598 13.7424 3.2396 13.2033 3.56463C13.2038 3.56568 13.2042 3.56674 13.2047 3.56779C13.7334 3.50361 14.2364 3.36302 14.7048 3.15546L14.7037 3.15715C14.3667 3.66183 13.9431 4.10736 13.4561 4.47034C13.4823 4.64672 13.4956 4.82427 13.4956 5.00079C13.4956 8.6871 10.6873 12.9746 5.52122 12.9746C3.93906 12.9746 2.46544 12.511 1.22505 11.7152C0.992632 11.5661 0.925108 11.2568 1.07423 11.0244C1.0874 11.0038 1.10183 10.9846 1.11734 10.9666C1.20582 10.8202 1.37438 10.7309 1.5554 10.7522C2.47066 10.8601 3.38568 10.7485 4.19219 10.3962C3.39226 10.0434 2.77129 9.35975 2.50204 8.51974C2.45359 8.3686 2.48835 8.20311 2.59351 8.08422C2.59716 8.0801 2.60087 8.07606 2.60464 8.0721C1.96391 7.50819 1.55973 6.68208 1.55973 5.76143V5.72759C1.55973 5.56814 1.64411 5.42059 1.78155 5.33974C1.82671 5.31317 1.87537 5.29511 1.92532 5.28558C1.70549 4.86154 1.58116 4.37984 1.58116 3.86958C1.58116 3.40165 1.58384 2.81192 1.91332 2.28081C1.98718 2.16175 2.10758 2.08915 2.2364 2.07195C2.42588 2.01237 2.64087 2.06969 2.77406 2.23302C3.86536 3.57126 5.44066 4.49583 7.23366 4.73961L7.23336 4.69629ZM5.52122 11.9746C4.73387 11.9746 3.97781 11.8435 3.27248 11.6023C4.13012 11.4538 4.95307 11.1159 5.66218 10.5602C5.81211 10.4427 5.87182 10.2435 5.81126 10.0629C5.7507 9.88234 5.583 9.75943 5.39255 9.75607C4.68968 9.74366 4.06712 9.39716 3.67793 8.86845C3.86828 8.85306 4.05428 8.82039 4.23445 8.77167C4.43603 8.71716 4.57363 8.53114 4.56674 8.32243C4.55985 8.11372 4.41029 7.93718 4.20555 7.89607C3.42694 7.73977 2.79883 7.16764 2.56169 6.42174C2.76255 6.47025 2.97102 6.4991 3.18482 6.5061C3.38563 6.51267 3.56646 6.38533 3.62795 6.19405C3.68943 6.00277 3.61666 5.79391 3.44963 5.68224C2.86523 5.29155 2.48116 4.62464 2.48116 3.86958C2.48116 3.70213 2.48352 3.55268 2.49355 3.41719C3.85115 4.79913 5.70873 5.68931 7.77588 5.79338C7.93225 5.80126 8.08328 5.73543 8.18395 5.61553C8.28463 5.49562 8.32332 5.33548 8.28851 5.18284C8.25255 5.02517 8.23336 4.86284 8.23336 4.69629C8.23336 3.52085 9.18591 2.56857 10.36 2.56857C11.5943 2.56857 12.4956 3.71208 12.4956 5.00079C12.4956 8.25709 10.0202 11.9746 5.52122 11.9746Z"fill="#fff"/></svg>
+                        <div class="text-x">
+                            <h2 style="font-size: 17px; font-weight: 500; margin: 0; line-height: 1.2;">Follow ClickDrink on Twitter</h2>
+                            <p class="bp">+4000 CLD</p>
+                        </div>
+                    </div>
+                    <a href="https://x.com/" target="_blank" class="button-link">
+                        <button class="button-x">
+                            <span class="button-text">Start</span>
+                            <span class="preloader"></span>
+                            <svg class="disabled-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8a8a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+                <div class="item-x">
+                    <div class="icon-text">
+                        <svg style="margin-right: 10px;" fill="#fff" width="25px" height="25px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M 26.070313 3.996094 C 25.734375 4.011719 25.417969 4.109375 25.136719 4.21875 L 25.132813 4.21875 C 24.847656 4.332031 23.492188 4.902344 21.433594 5.765625 C 19.375 6.632813 16.703125 7.757813 14.050781 8.875 C 8.753906 11.105469 3.546875 13.300781 3.546875 13.300781 L 3.609375 13.277344 C 3.609375 13.277344 3.25 13.394531 2.875 13.652344 C 2.683594 13.777344 2.472656 13.949219 2.289063 14.21875 C 2.105469 14.488281 1.957031 14.902344 2.011719 15.328125 C 2.101563 16.050781 2.570313 16.484375 2.90625 16.722656 C 3.246094 16.964844 3.570313 17.078125 3.570313 17.078125 L 3.578125 17.078125 L 8.460938 18.722656 C 8.679688 19.425781 9.949219 23.597656 10.253906 24.558594 C 10.433594 25.132813 10.609375 25.492188 10.828125 25.765625 C 10.933594 25.90625 11.058594 26.023438 11.207031 26.117188 C 11.265625 26.152344 11.328125 26.179688 11.390625 26.203125 C 11.410156 26.214844 11.429688 26.21875 11.453125 26.222656 L 11.402344 26.210938 C 11.417969 26.214844 11.429688 26.226563 11.441406 26.230469 C 11.480469 26.242188 11.507813 26.246094 11.558594 26.253906 C 12.332031 26.488281 12.953125 26.007813 12.953125 26.007813 L 12.988281 25.980469 L 15.871094 23.355469 L 20.703125 27.0625 L 20.8125 27.109375 C 21.820313 27.550781 22.839844 27.304688 23.378906 26.871094 C 23.921875 26.433594 24.132813 25.875 24.132813 25.875 L 24.167969 25.785156 L 27.902344 6.65625 C 28.007813 6.183594 28.035156 5.742188 27.917969 5.3125 C 27.800781 4.882813 27.5 4.480469 27.136719 4.265625 C 26.769531 4.046875 26.40625 3.980469 26.070313 3.996094 Z M 25.96875 6.046875 C 25.964844 6.109375 25.976563 6.101563 25.949219 6.222656 L 25.949219 6.234375 L 22.25 25.164063 C 22.234375 25.191406 22.207031 25.25 22.132813 25.308594 C 22.054688 25.371094 21.992188 25.410156 21.667969 25.28125 L 15.757813 20.75 L 12.1875 24.003906 L 12.9375 19.214844 C 12.9375 19.214844 22.195313 10.585938 22.59375 10.214844 C 22.992188 9.84375 22.859375 9.765625 22.859375 9.765625 C 22.886719 9.3125 22.257813 9.632813 22.257813 9.632813 L 10.082031 17.175781 L 10.078125 17.15625 L 4.242188 15.191406 L 4.242188 15.1875 C 4.238281 15.1875 4.230469 15.183594 4.226563 15.183594 C 4.230469 15.183594 4.257813 15.171875 4.257813 15.171875 L 4.289063 15.15625 L 4.320313 15.144531 C 4.320313 15.144531 9.53125 12.949219 14.828125 10.71875 C 17.480469 9.601563 20.152344 8.476563 22.207031 7.609375 C 24.261719 6.746094 25.78125 6.113281 25.867188 6.078125 C 25.949219 6.046875 25.910156 6.046875 25.96875 6.046875 Z"/></svg>
+                        <div class="text-x">
+                            <h2 style="font-size: 17px; font-weight: 500; margin: 0; line-height: 1.2;">Join ClickDrink Telegram</h2>
+                            <p class="bp">+4000 CLD</p>
+                        </div>
+                    </div>
+                    <a href="https://t.me/" target="_blank" class="button-link">
+                        <button class="button-x">
+                            <span class="button-text">Start</span>
+                            <span class="preloader"></span>
+                            <svg class="disabled-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8a8a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+                <div class="item-x">
+                    <div class="icon-text">
+                    <svg style="margin-right: 15px;" fill="#fff"  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  width="22px" height="22px" viewBox="0 0 512 512" xml:space="preserve"><g id="7935ec95c421cee6d86eb22ecd125aef"><path style="display: inline; fill-rule: evenodd; clip-rule: evenodd;" d="M116.504,500.219V170.654H6.975v329.564H116.504L116.504,500.219z M61.751,125.674c38.183,0,61.968-25.328,61.968-56.953c-0.722-32.328-23.785-56.941-61.252-56.941C24.994,11.781,0.5,36.394,0.5,68.722c0,31.625,23.772,56.953,60.53,56.953H61.751L61.751,125.674z M177.124,500.219c0,0,1.437-298.643,0-329.564H286.67v47.794h-0.727c14.404-22.49,40.354-55.533,99.44-55.533c72.085,0,126.116,47.103,126.116,148.333v188.971H401.971V323.912c0-44.301-15.848-74.531-55.497-74.531c-30.254,0-48.284,20.38-56.202,40.08c-2.897,7.012-3.602,16.861-3.602,26.711v184.047H177.124L177.124,500.219z"></path></g></svg>
+                        <div class="text-x">
+                            <h2 style="font-size: 17px; font-weight: 500; margin: 0; line-height: 1.2;">Follow ClickDrink on LinkedIn</h2>
+                            <p class="bp">+4000 CLD</p>
+                        </div>
+                    </div>
+                    <a href="https://www.linkedin.com/" target="_blank" class="button-link">
+                        <button class="button-x">
+                            <span class="button-text">Start</span>
+                            <span class="preloader"></span>
+                            <svg class="disabled-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8a8a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+                <div class="item-x">
+                    <div class="icon-text">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <div class="text-x">
+                            <h2 style="font-size: 17px; font-weight: 500; margin: 0; line-height: 1.2;">Follow ClickDrink on Instagram</h2>
+                            <p class="bp">+2000 CLD</p>
+                        </div>
+                    </div>
+                    <a href="https://www.instagram.com/" target="_blank" class="button-link">
+                        <button class="button-x">
+                            <span class="button-text">Start</span>
+                            <span class="preloader"></span>
+                            <svg class="disabled-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8a8a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-container-3">
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.bottom-nav a');
+        const contentSections = document.querySelectorAll('.content-section');
+        const bottomNav = document.querySelector('.bottom-nav');
+
+        function showContent(targetId) {
+            contentSections.forEach(section => {
+                if (section.id === targetId) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.id.replace('-nav', '-content');
+                showContent(targetId);
+                setActiveNav(this.id);
+                updateNavMode();
+            });
+        });
+
+        // Mobile menu toggle
+
+        document.addEventListener('click', function(event) {
+            let targetElement = event.target;
+            do {
+                if (targetElement == navLinksMenu || targetElement == menuToggle) {
+                    return;
+                }
+                targetElement = targetElement.parentNode;
+            } while (targetElement);
+            navLinksMenu.style.display = 'none';
+        });
+
+        document.addEventListener('click', function(event) {
+            let targetElement = event.target;
+            do {
+                if (targetElement == navLinksMenu2 || targetElement == menuToggle2) {
+                    return;
+                }
+                targetElement = targetElement.parentNode;
+            } while (targetElement);
+            navLinksMenu2.style.display = 'none';
+        });
+    });
+  </script>
+
+  <script>
+    //fetch TG username
+    window.Telegram.WebApp.ready();
+    const user = Telegram.WebApp.initDataUnsafe.user;
+
+    if (user) {
+        const usernameDisplay = user.username || user.first_name;
+        document.getElementById("username").innerText = usernameDisplay;
+    } else {
+        document.getElementById("username").innerText = "User";
+    }
+    
+    //preloader
+    document.addEventListener("DOMContentLoaded", function() {
+    let imagesLoaded = 0;
+    const totalImages = document.images.length;
+
+    function imageLoaded() {
+        imagesLoaded++;
+        if (imagesLoaded == totalImages) {
+        hidePreloader();
+        }
+    }
+
+    function hidePreloader() {
+        document.getElementById('preloader').style.display = 'none';
+    }
+
+    if (totalImages === 0) {
+        hidePreloader();
+    } else {
+        for (let i = 0; i < totalImages; i++) {
+        if (document.images[i].complete) {
+            imageLoaded();
+        } else {
+            document.images[i].addEventListener('load', imageLoaded);
+            document.images[i].addEventListener('error', imageLoaded);
+        }
+        }
+    }
+    });
+
+    // Function to extract reward amount from the button's sibling elements
+    const getRewardAmount = (button) => {
+        const parent = button.closest('.item-x');
+        const bpElement = parent.querySelector('.bp');
+        if (bpElement) {
+            const text = bpElement.textContent.trim();
+            const match = text.match(/\+(\d+) CLD/);
+            if (match && match[1]) {
+                return parseInt(match[1], 10);
+            }
+        }
+        return 0;
+    };
+
+    // Track task status to prevent multiple clicks
+    let inProgress = false;
+
+    //loading start buttons
+    document.querySelectorAll('.button-x').forEach((button, index) => {
+        const reward = getRewardAmount(button);
+        const buttonText = button.querySelector('.button-text');
+        const disabledIcon = button.querySelector('.disabled-icon');
+        const taskKey = 'taskButton' + index;
+
+        if (localStorage.getItem(taskKey) === 'completed') {
+            buttonText.style.display = 'none';
+            disabledIcon.style.display = 'inline-block';
+        }
+
+        button.addEventListener('click', () => {
+            if (button.id === 'mainButton') return;
+            if (inProgress) return;
+            inProgress = true;
+            if (button.textContent.includes('Share with friends')) {
+                shareLink();
+                button.classList.add('loading');
+
+                setTimeout(() => {
+                    button.classList.remove('loading');
+                    buttonText.style.display = 'none';
+                    disabledIcon.style.display = 'inline-block';
+                    localStorage.setItem(taskKey, 'completed');
+                    inProgress = false;
+                }, 10000);
+            } else {
+                const taskCompleted = localStorage.getItem(taskKey) === 'completed';
+                if (!taskCompleted) {
+                    button.classList.add('loading');
+                    buttonText.style.display = 'none';
+                    setTimeout(() => {
+                        count += reward;
+                        updateCounter();
+                        updateServerCounter(count);
+                        animateFloatingNumber();
+
+                        button.classList.remove('loading');
+                        buttonText.style.display = 'none';
+                        disabledIcon.style.display = 'inline-block';
+                        localStorage.setItem(taskKey, 'completed');
+                        inProgress = false;
+                    }, 10000);
+                } else {
+                    console.log('Task already completed');
+                    inProgress = false;
+                }
+            }
+        });
+    });
+    
+    //share button
+    const shareLink = () => {
+        if (window.Telegram && window.Telegram.WebApp) {
+            try {
+                window.Telegram.WebApp.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent("https://t.me/") + "&text=" + encodeURIComponent("ClickDrink: Tap to start earning with Click Drink!"));
+                console.log("Link shared successfully via Telegram.");
+            } catch (error) {
+                console.error("Error sharing link via Telegram:", error);
+            }
+        } else {
+            console.error("Telegram WebApp API not available.");
+        }
+    };
+
+    //Persist Disabled State Using localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('home-content').style.display = 'block';
+        document.getElementById('settings-content').style.display = 'none';
+        document.querySelector('.next-button').addEventListener('click', function() {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('settings-content').style.display = 'block';
+        });
+    });
+
+  </script>
+
+  <script>
+    //tap & earn section
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+    }
+    const button = document.getElementById('mainButton');
+    const counter = document.getElementById('counter');
+    const floatingNumber = document.getElementById('floatingNumber');
+    const dollarValue = document.getElementById('dollarValue');
+    const infoIcon = document.getElementById('infoIcon');
+    const tooltip = document.getElementById('tooltip');
+
+    let count = 5000;
+    let debounceTimer;
+
+    function debounce(func, delay) {
+    return (...args) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func(...args), delay);
+    };
+    }
+
+    const fetchCounter = async () => {
+        try {
+            const response = await fetch('/getCounter');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            count = data.count;
+            updateCounter();
+        } catch (error) {
+            console.error('Error fetching counter:', error);
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', fetchCounter);
+
+        const formatNumber = (num) => new Intl.NumberFormat().format(num);
+
+        const animateFloatingNumber = () => {
+        floatingNumber.classList.remove('hidden');
+        floatingNumber.classList.add('float-animation');
+        
+        setTimeout(() => {
+            floatingNumber.classList.add('hidden');
+            floatingNumber.classList.remove('float-animation');
+        }, 3000);
+        };
+
+        const updateCounter = () => {
+        const dollarAmount = (count * 0.00005).toFixed(2);
+        counter.firstChild.textContent = formatNumber(count);
+        dollarValue.textContent = `$${dollarAmount}`;
+        };
+
+        const updateServerCounter = debounce(async (count) => {
+        try {
+            const response = await fetch('/updateCounter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ count })
+            });
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            console.log(data.message);
+        } catch (error) {
+            console.error('Error updating counter:', error);
+        }
+        }, 1000);
+
+        function triggerHapticFeedback() {
+            // iOS method (Telegram WebApp)
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+
+            if (window.Android && typeof window.Android.vibrate === 'function') {
+                window.Android.vibrate(50);
+            }
+        }
+
+        button.addEventListener('click', () => {
+            button.style.animation = 'buttonPress 0.15s ease';
+            
+            triggerHapticFeedback();
+
+            count++;
+            updateCounter();
+            updateServerCounter(count);
+            animateFloatingNumber();
+
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 150);
+        });
+
+        infoIcon.addEventListener("mouseenter", () => tooltip.style.display = "block");
+        infoIcon.addEventListener("mouseleave", () => tooltip.style.display = "none");
+        infoIcon.addEventListener("click", () => {
+        tooltip.style.display = tooltip.style.display === "block" ? "none" : "block";
+    });
+    
+    fetchCounter();
+    updateCounter();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const playButton = document.querySelector('.play-button');
+        const tapEarnSection = document.getElementById('tap-earn-section');
+        playButton.addEventListener('click', function() {
+            tapEarnSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+  </script>
+
+</body>
+</html>
