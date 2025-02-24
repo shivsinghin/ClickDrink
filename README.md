@@ -3,7 +3,7 @@
 ![ClickDrink Cover](assets/cover.png)
 
 <div align="center">
-  <img src="assets/screenshot-1.png" width="45%" alt="ClickDrink Screenshot 1">
+  <img src="assets/screenshot.png" width="45%" alt="ClickDrink Screenshot 1">
   <img src="assets/screenshot-2.png" width="45%" alt="ClickDrink Screenshot 2">
 </div>
 
