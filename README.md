@@ -2,6 +2,11 @@
 
 ![ClickDrink Cover](assets/cover.png)
 
+<div align="center">
+  <img src="assets/screenshot-1.png" width="45%" alt="ClickDrink Screenshot 1">
+  <img src="assets/screenshot-2.png" width="45%" alt="ClickDrink Screenshot 2">
+</div>
+
 A Telegram Mini App that lets users earn rewards through social engagement and interactive clicking. Built with HTML, CSS, JavaScript, Express.js, MongoDB, Mongoose, Node.js, body-parser, session management, HTTPS, dotenv, and more with seamless integration with Telegram's WebApp platform.
 
 ## 🚀 Features
